@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXORA — Cyber Intelligence Dashboard (Demo)</title>
+<meta name="description" content="Frontend demonstration of a cybersecurity dashboard. All data is simulated.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div id="boot" class="boot" role="status"><span class="spin"></span><p>Initializing demo environment…</p></div>
+
+<header class="top">
+  <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">☰</button>
+  <a class="brand" href="#overview" aria-label="NEXORA overview"><span class="logo" aria-hidden="true">◈</span><span class="brand-name">NEXORA</span></a>
+  <div class="search" role="search">
+    <label class="sr" for="g-q">Search activity logs</label>
+    <input id="g-q" type="search" placeholder="Search events… ( / )" maxlength="60" autocomplete="off">
+  </div>
+  <div class="top-right">
+    <div class="clock"><span id="date"></span><time id="clock"></time></div>
+    <div class="dd">
+      <button class="icon-btn" id="notif-btn" type="button" aria-label="Notifications" aria-expanded="false" aria-controls="notif-panel">🔔<span class="badge" id="notif-badge" hidden>0</span></button>
+      <div class="panel dd-panel" id="notif-panel" hidden>
+        <div class="dd-head"><strong>Notifications</strong><button class="link" id="notif-clear" type="button">Mark all read</button></div>
+        <ul class="plain" id="notif-list"></ul>
+      </div>
+    </div>
+    <div class="dd">
+      <button class="avatar" id="prof-btn" type="button" aria-label="Profile menu" aria-expanded="false" aria-controls="prof-menu">AN</button>
+      <div class="panel dd-panel" id="prof-menu" hidden>
+        <p class="muted small pm">Analyst (demo profile)</p>
+        <button class="menu-item" type="button" data-act="settings">Settings</button>
+        <button class="menu-item" type="button" data-act="keys">Keyboard shortcuts</button>
+        <button class="menu-item" type="button" data-act="about">About this demo</button>
+        <button class="menu-item" type="button" disabled>Sign out (unavailable in demo)</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <nav><ul class="plain">
+      <li><button class="nav-btn" type="button" data-view="overview" title="Overview Dashboard"><i aria-hidden="true">▦</i><span>Overview Dashboard</span></button></li>
+      <li><button class="nav-btn" type="button" data-view="threats" title="Threat Intelligence"><i aria-hidden="true">◉</i><span>Threat Intelligence</span></button></li>
+      <li><button class="nav-btn" type="button" data-view="network" title="Network Monitor"><i aria-hidden="true">⇄</i><span>Network Monitor</span></button></li>
+      <li><button class="nav-btn" type="button" data-view="logs" title="Activity Logs"><i aria-hidden="true">☰</i><span>Activity Logs</span></button></li>
+      <li><button class="nav-btn" type="button" data-view="reports" title="Security Reports"><i aria-hidden="true">▤</i><span>Security Reports</span></button></li>
+      <li><button class="nav-btn" type="button" data-view="settings" title="Settings"><i aria-hidden="true">⚙</i><span>Settings</span></button></li>
+    </ul></nav>
+    <p class="side-note">Simulated data only</p>
+  </aside>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <main id="main" tabindex="-1">
+    <p class="banner" role="note">Frontend demonstration. All metrics, events, and threat records are simulated and fictional. Nothing here scans or monitors a real system.</p>
+
+    <section class="view" id="view-overview" aria-labelledby="t-overview">
+      <h2 id="t-overview">Overview Dashboard</h2>
+      <div class="cards" data-cards="main"></div>
+      <div class="grid2">
+        <div data-chart="threat" data-title="Threat activity, last 24h"></div>
+        <div data-chart="traffic" data-title="Network traffic (Mbps)"></div>
+        <div data-chart="sev" data-title="Threat severity distribution"></div>
+        <div data-chart="trend" data-title="Security event trends, 7 days"></div>
+      </div>
+      <section class="panel" id="ov-net"><h3>Network map</h3><div data-net></div></section>
+      <section class="panel" id="ov-events"><h3>Recent security events</h3><div data-table="ev"></div></section>
+    </section>
+
+    <section class="view" id="view-threats" hidden aria-labelledby="t-threats">
+      <h2 id="t-threats">Threat Intelligence</h2>
+      <div class="cards" id="th-cards"></div>
+      <div class="panel">
+        <div class="toolbar">
+          <input id="th-q" type="search" placeholder="Search threats…" aria-label="Search threats" maxlength="60" autocomplete="off">
+          <div class="chips" id="th-chips" role="group" aria-label="Filter by severity"></div>
+        </div>
+        <div class="tgrid" id="th-grid"></div>
+        <div class="empty" id="th-empty" role="status" hidden><strong>No matching threats</strong><span>Try another search or choose “All”.</span></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-network" hidden aria-labelledby="t-network">
+      <h2 id="t-network">Network Monitor</h2>
+      <div class="cards" data-cards="net"></div>
+      <div class="toolbar"><button class="btn" id="pause-btn" type="button" aria-pressed="false">Pause demo</button><span class="muted small">Traffic readings and connection events are simulated.</span></div>
+      <section class="panel"><h3>Network map</h3><div data-net></div></section>
+      <div class="grid2">
+        <div data-chart="traffic" data-title="Traffic timeline, last 24h (Mbps)"></div>
+        <section class="panel"><h3>Simulated connection events</h3><ul class="plain evlist" id="net-events"></ul></section>
+      </div>
+    </section>
+
+    <section class="view" id="view-logs" hidden aria-labelledby="t-logs">
+      <h2 id="t-logs">Activity Logs</h2>
+      <section class="panel"><div data-table="lg"></div></section>
+    </section>
+
+    <section class="view" id="view-reports" hidden aria-labelledby="t-reports">
+      <h2 id="t-reports">Security Reports</h2>
+      <div class="panel">
+        <div class="toolbar">
+          <label class="fld">Range <select id="rep-range"><option value="6">Last 6 hours</option><option value="12">Last 12 hours</option><option value="24" selected>Last 24 hours</option><option value="all">All demo data</option></select></label>
+          <button class="btn" id="rep-gen" type="button">Generate report</button>
+          <button class="btn ghost" id="rep-csv" type="button">Download CSV</button>
+          <button class="btn ghost" id="rep-print" type="button">Print report</button>
+        </div>
+        <div class="print-head"><h3>NEXORA demo security report</h3><p id="rep-meta"></p><p>Simulated demonstration data. Not a real security assessment.</p></div>
+        <div id="rep-out" aria-live="polite"></div>
+      </div>
+      <div class="grid2">
+        <div data-chart="sev" data-title="Severity distribution (all demo events)"></div>
+        <div data-chart="trend" data-title="Activity trends, 7 days"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-settings" hidden aria-labelledby="t-settings">
+      <h2 id="t-settings">Settings</h2>
+      <div class="panel set">
+        <fieldset><legend>Accent color</legend><div class="chips" id="accents"></div></fieldset>
+        <label class="row">Density <select id="set-density"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+        <label class="row"><input type="checkbox" id="set-anim"> Enable animations (system reduced-motion is always respected)</label>
+        <label class="row"><input type="checkbox" id="set-notify"> Simulated alert notifications</label>
+        <label class="row"><input type="checkbox" id="set-net"> Show network map on overview</label>
+        <label class="row"><input type="checkbox" id="set-events"> Show recent events on overview</label>
+        <div><button class="btn ghost" id="set-reset" type="button">Reset to defaults</button></div>
+      </div>
+    </section>
+
+    <footer class="foot">NEXORA is a frontend demo built with HTML, CSS, and vanilla JavaScript. Simulated data only.</footer>
+  </main>
+</div>
+
+<dialog id="modal" aria-labelledby="modal-title">
+  <div class="modal-in">
+    <div class="dd-head"><h3 id="modal-title"></h3><button class="icon-btn" id="modal-x" type="button" aria-label="Close dialog">✕</button></div>
+    <dl class="kv" id="modal-body"></dl>
+    <p class="muted small" id="modal-note"></p>
+  </div>
+</dialog>
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>
